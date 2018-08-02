@@ -23,27 +23,32 @@
                     <g:form action="search" method="GET" class="form-inline">
                         <div class="fieldcontain">
                             <div class="col-md-6">
-
-                                <label for="name">Nome/E-mail:</label>
-                                <g:textField name="name" value="${params.name}" />
-
-                                <label for="desc">Descrição:</label>
-                                <g:textField name="desc" value="${params.desc}" />
-
-                                <label for="paymentMethod">Forma de pagamento:</label>
-                                <g:select name="paymentMethod"from="${billing.constrainedProperties.paymentMethod.inList}"  value="${params.paymentMethod}" />
-                                
+                                <div>
+                                    <label for="name">Nome/E-mail:</label>
+                                    <g:textField name="name" value="${params.name}" />
+                                </div>
+                                <div>
+                                    <label for="desc">Descrição:</label>
+                                    <g:textField name="desc" value="${params.desc}" />
+                                </div>
+                                <div>
+                                    <label for="paymentMethod">Forma de pagamento:</label>
+                                    <g:select name="paymentMethod"from="${billing.constrainedProperties.paymentMethod.inList}"  value="${params.paymentMethod}" />
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                    <div>
-                                <label for="dueDateBegin">Vencimento inicial:</label>
-                                <g:datePicker name="dueDateBegin" value="${params.dueDateBegin}" precision="day" />
-                            </div> <div></div>
-                                <label for="dueDateEnd">Vencimento final:</label>
-                                <g:datePicker name="dueDateEnd" value="${params.dueDateEnd}" precision="day" />
+                                <div>
+                                    <label for="dueDateBegin">Vencimento inicial:</label>
+                                    <g:datePicker name="dueDateBegin" value="${params.dueDateBegin}" precision="day" />
+                                </div>
+                                <div>
+                                    <label for="dueDateEnd">Vencimento final:</label>
+                                    <g:datePicker name="dueDateEnd" value="${params.dueDateEnd}" precision="day" />
+                                </div>
                             </div>
+                            <div>
+                                <g:actionSubmit value="Buscar" action="search" />
                             </div>
-                            <g:actionSubmit value="Buscar" action="search" />
                         </div>
                     </g:form>
                 </fieldset>

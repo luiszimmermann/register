@@ -10,10 +10,7 @@ class BillingController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", search: "GET"]
 
     def search() {
-        respond Billing.nameOrEmailStartsWith(params.name).descriptionStartsWith(params.desc)
-                    .dueDateBetween(params.dueDateBegin, params.dueDateEnd).paymentMethodIs(params.paymentMethod).list()
-                    , view: 'index'
-                    , model:[billing: new Billing()]
+        respond Billing.nameOrEmailStartsWith(params.name).descriptionStartsWith(params.desc).dueDateBetween(params.dueDateBegin, params.dueDateEnd).paymentMethodIs(params.paymentMethod).list(), view: 'index', model:[billing: new Billing()]
     }
 
     def index(Integer max) {
