@@ -76,7 +76,10 @@ class BillingController {
             return
         }
 
-        billingService.delete(id)
+        Billing billing = billingService.get(id)
+        billing.deleted = true
+        billingService.save(billing)
+        //billingService.delete(id)
 
         request.withFormat {
             form multipartForm {
