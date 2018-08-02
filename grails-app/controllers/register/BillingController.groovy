@@ -7,11 +7,18 @@ class BillingController {
 
     BillingService billingService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", search: "GET"]
+
+    def search() {
+        respond Billing.nameOrEmailStartsWith(params.name).descriptionStartsWith(params.desc)
+                    .dueDateBetween(params.dueDateBegin, params.dueDateEnd).paymentMethodIs(params.paymentMethod).list()
+                    , view: 'index'
+                    , model:[billing: new Billing()]
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond billingService.list(params), model:[billingCount: billingService.count()]
+        respond billingService.list(params), model:[billing: new Billing()]
     }
 
     def show(Long id) {
@@ -79,7 +86,6 @@ class BillingController {
         Billing billing = billingService.get(id)
         billing.deleted = true
         billingService.save(billing)
-        //billingService.delete(id)
 
         request.withFormat {
             form multipartForm {

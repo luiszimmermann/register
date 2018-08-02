@@ -9,18 +9,23 @@ class Billing {
     Double value
     String paymentMethod
     String description
-    Boolean deleted
-    
+    Boolean deleted = false
+    CpfService cpfService
+
+    static transients = ['cpfService']
+
     static mapping = {
+        autowire true
         table "billings"
         id column: 'id', type: 'integer'
+        deleted defaultValue: false
     }
 
     static constraints = {
         name nullable: false, blank: false
         email email: true, blank: true, nullable: true
-        cpf blank: true, nullable: true
-        value min: 5.0d, nullable: false, blank: false
+        cpf blank: true, nullable: true, validator: { value, obj, errors ->  if (value && !(obj.cpfService.validate(value))) errors.rejectValue("cpf", "billing.cpf.invalid") }
+        value min: 5.0d, scale: 2, nullable: false, blank: false
         paymentMethod inList: ['Boleto Bancário', 'Cartão de Crédito'], nullable: false, blank: false
         dueDate min: new Date(), nullable: false, blank: false
         description nullable: false, blank: false
@@ -29,8 +34,8 @@ class Billing {
     static namedQueries = {
         nameOrEmailStartsWith { nameEmail ->
             or {
-                like 'name', '${nameEmail}%'
-                like 'email', '${nameEmail}%'
+                like 'name', nameEmail+'%'
+                like 'email', nameEmail+'%'
             }
         }
 
@@ -38,8 +43,12 @@ class Billing {
             eq 'paymentMethod', pMethod
         }
 
-        descriptionStartsWith { description ->
-            like 'description', '${description}%'
+        dueDateBetween { Date begin, Date end ->
+            between 'dueDate', begin, end
+        }
+
+        descriptionStartsWith { desc ->
+            like 'description', desc+'%'
         }
     }
 }
